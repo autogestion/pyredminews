@@ -269,6 +269,14 @@ class Issue(Redmine_Item):
 		'''Save all changes and close this issue'''
 		self.set_status( self._redmine.ISSUE_STATUS_ID_CLOSED, notes=notes )
 
+	def get_spent_hours(self):
+
+		target = self._item_path
+		json_data = self._redmine.get(target % str(self.id), )
+		data = self._redmine.unwrap_json(None, json_data)
+		return data['issue']['spent_hours']
+
+
 class Journal(Redmine_Item):
         """
         Object for representing a single Redmine issue journal entry.
