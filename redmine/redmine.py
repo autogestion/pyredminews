@@ -117,6 +117,11 @@ class Project(Redmine_Item):
 													item_new_path='/projects/%s/time_entries.json' % self.id)
 
 		
+		# Roadmaps for this project
+		self.__dict__['versions'] = Redmine_Items_Manager(redmine, Version,
+													query_path='/projects/%s/versions.json' % self.id,
+													item_new_path='/projects/%s/versions.json' % self.id)
+
 		# Manage wiki pages if they're available
 		if redmine._wiki_pages:
 			self.__dict__['wiki_pages'] = Redmine_Wiki_Pages_Manager(redmine, self)
@@ -163,6 +168,42 @@ class Tracker(Redmine_Item):
 
 
 
+class Version(Redmine_Item):
+	'''Object for representing a Redmine roadmap.'''
+	# data hints:
+	id = None
+	name = None
+	description = None
+	sharing = None
+	project = None
+	status = None
+
+	_protected_attr = ['id',
+					   'created_on',
+					   'updated_on',		
+					   ]
+
+	_field_type = {
+		'created_on':'datetime',
+		'updated_on':'datetime',
+		}
+
+	# these fields will map from tag to tag_id when saving the issue.
+	# for instance, redmine needs the category_id=#, not the category as given
+	# the logic will attempt to grab category['id'] to set category_id 
+	_remap_to_id = ['project']		
+
+	# How to communicate this info to/from the server
+	_query_container = 'versions'
+	_query_path = ''
+	_item_path = '/versions/%s.json'
+	_item_new_path = ''
+
+	def __str__(self):
+		return '<Redmine version #%s, "%s">' % (self.id, self.name)
+
+
+
 class Issue(Redmine_Item):
 	'''Object representing a Redmine issue.'''
 	# data hints:
@@ -177,6 +218,7 @@ class Issue(Redmine_Item):
 	assigned_to = None
 	start_date = None
 	due_date = None
+	fixed_version = None
 	
 	_protected_attr = ['id',
 					   'created_on',
@@ -202,7 +244,8 @@ class Issue(Redmine_Item):
 				    'project',
 				    'category',
 				    'status',
-				    'parent_issue']
+				    'parent_issue',
+				    'fixed_version']
 
 	# How to communicate this info to/from the server
 	_query_container = 'issues'
