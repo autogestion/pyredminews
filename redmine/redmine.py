@@ -687,8 +687,7 @@ class Redmine(Redmine_WS):
 		self.issues = Redmine_Items_Manager(self, Issue)
 		self.projects = Redmine_Items_Manager(self, Project)
 		self.trackers = Redmine_Items_Manager(self, Tracker)
-		self.roles = Redmine_Items_Manager(self, Role)
-
+		
 		if version_check >= 1.1:
 			self.users = Redmine_Items_Manager(self, User)
 			self.news = Redmine_Items_Manager(self, News)
@@ -707,6 +706,7 @@ class Redmine(Redmine_WS):
 		self._project_memberships = False
 		if version_check >= 1.4:
 			self._project_memberships = True
+			self.roles = Redmine_Items_Manager(self, Role)
 			#roles
 			pass
 			
