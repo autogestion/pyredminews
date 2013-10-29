@@ -508,6 +508,17 @@ class Role(Redmine_Item):
 
 	_protected_attr = ['id', 'name']
 	
+	# How to communicate this info to/from the server
+	_query_container = 'roles'
+	_query_path = '/roles.json'
+	_item_path = '/roles/%s.json'
+	_item_new_path = ''
+
+
+	def __str__(self):
+		return '<Redmine role #%s, "%s">' % (self.id, self.name)
+
+
 
 class Wiki_Page(Redmine_Item):
 	'''Object for representing a single Redmine Wiki Page'''
@@ -676,6 +687,7 @@ class Redmine(Redmine_WS):
 		self.issues = Redmine_Items_Manager(self, Issue)
 		self.projects = Redmine_Items_Manager(self, Project)
 		self.trackers = Redmine_Items_Manager(self, Tracker)
+		self.roles = Redmine_Items_Manager(self, Role)
 
 		if version_check >= 1.1:
 			self.users = Redmine_Items_Manager(self, User)
