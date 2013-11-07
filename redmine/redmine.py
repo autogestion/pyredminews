@@ -320,6 +320,29 @@ class Issue(Redmine_Item):
 		return data['issue']['spent_hours']
 
 
+
+class IssueStatus(Redmine_Item):
+	'''Object to describe a user's role on a project'''
+	# data hints:
+	id = None
+	name = None
+	is_default = None
+	is_closed = None
+
+	_protected_attr = ['id', 'name']
+	
+	# How to communicate this info to/from the server
+	_query_container = 'issue_statuses'
+	_query_path = '/issue_statuses.json'
+	_item_path = ''
+	_item_new_path = ''
+
+
+	def __str__(self):
+		return '<Redmine issue status #%s, "%s">' % (self.id, self.name)
+
+
+
 class Journal(Redmine_Item):
         """
         Object for representing a single Redmine issue journal entry.
@@ -699,6 +722,7 @@ class Redmine(Redmine_WS):
 			#queries
 			#attachments
 			#issue statuses
+			self.issue_statuses = Redmine_Items_Manager(self, IssueStatus)
 			#trackers
 			#issue categories
 			pass
