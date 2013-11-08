@@ -267,22 +267,23 @@ class Issue(Redmine_Item):
 	def __str__(self):
 		return '<Redmine issue #%s, "%s">' % (self.id, self.subject)
 
-        @property
-        def journals(self):
-                """
-                Retrieve journals attribute for this very Issue
-                """
-                try:
-                    target = self._item_path
-                    json_data = self._redmine.get(target % str(self.id), parms = {'include': 'journals'})
-                    data = self._redmine.unwrap_json(None, json_data)
-                    journals = [ Journal(redmine=self._redmine, data=j, type='issue_journal')
-                                 for j in data['issue']['journals']]
 
-                    return journals
+	@property
+	def journals(self):
+		"""
+		Retrieve journals attribute for this very Issue
+		"""
+		try:
+			target = self._item_path
+			json_data = self._redmine.get(target % str(self.id), parms = {'include': 'journals'})
+			data = self._redmine.unwrap_json(None, json_data)
+			journals = [ Journal(redmine=self._redmine, data=j, type='issue_journal')
+				for j in data['issue']['journals']]
 
-                except:
-                    return []
+			return journals
+
+		except:
+			return []
 
 	def save(self, notes=None):
 		'''Save all changes back to Redmine with optional notes.'''
@@ -322,7 +323,7 @@ class Issue(Redmine_Item):
 
 
 class IssueStatus(Redmine_Item):
-	'''Object to describe a user's role on a project'''
+	'''Object to describe a issue status'''
 	# data hints:
 	id = None
 	name = None
